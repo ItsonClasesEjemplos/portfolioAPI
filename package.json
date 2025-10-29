@@ -1,0 +1,33 @@
+{
+  "name": "portfolioapi",
+  "version": "1.0.0",
+  "description": "portfolio API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "dev:mongo": "export NODE_ENV=mongo&& nodemon index.js",
+    "dev:mongo-win": "set NODE_ENV=mongo&& nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItsonClasesEjemplos/portfolioAPI.git"
+  },
+  "keywords": [
+    "API",
+    "portfolio"
+  ],
+  "author": "briandaCampoy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ItsonClasesEjemplos/portfolioAPI/issues"
+  },
+  "homepage": "https://github.com/ItsonClasesEjemplos/portfolioAPI#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.2"
+  }
+}
