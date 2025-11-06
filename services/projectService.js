@@ -1,7 +1,8 @@
 const boom = require('@hapi/boom');
+const projectModel = require('../models/projectModel');
 
 const getProjectsByUser = async (userId) => {
-    return "getProjectsByUserId";
+    return projectModel.find({userId:userId});
 }
 
 const getProjectById = async (projectId) => {
