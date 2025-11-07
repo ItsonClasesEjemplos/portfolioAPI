@@ -10,9 +10,8 @@ function routerApi(app) {
     app.use('/api/v1', router);
 
     router.use('/auth', authRouter);
-
-    router.use('/projects', verifyToken, projectsRouter);
     router.use('/publicProjects', publicRouter);
+    router.use('/projects', verifyToken, projectsRouter);
 
     //router.use('/education', verifyToken, subjectRouter);
 
