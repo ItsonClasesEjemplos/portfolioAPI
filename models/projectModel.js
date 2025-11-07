@@ -17,7 +17,7 @@ const ProjectSchema = new Schema({
     },
     technologies:{
         type: Array,
-        required: true,
+        required: false,
     },
     repository:{
         type: String,
