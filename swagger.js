@@ -11,23 +11,13 @@ const swaggerDefinition = {
     servers: [
         {
             url: 'https://portfolio-api-three-black.vercel.app/api/v1',
-            description: 'Servidor en producción',
+            description: 'Producción (Vercel)',
         },
         {
             url: 'http://localhost:3000/api/v1',
             description: 'Servidor local',
         },
     ],
-    components: {
-        securitySchemes: {
-            bearerAuth: {
-                type: 'apiKey',
-                in: 'header',
-                name: 'auth-token',
-            },
-        },
-    },
-    security: [{ bearerAuth: [] }],
 };
 
 const options = {
@@ -38,14 +28,19 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app) {
-    const swaggerHTML = swaggerUi.generateHTML(swaggerSpec);
+    const isVercel = !!process.env.VERCEL;
 
-    app.get('/api-docs', (req, res) => {
-        res.setHeader('Content-Type', 'text/html');
-        res.send(swaggerHTML);
-    });
+    if (isVercel) {
+        const html = swaggerUi.generateHTML(swaggerSpec);
+        app.get('/api-docs', (req, res) => {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(html);
+        });
+    } else {
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    }
 
-    console.log('Swagger Docs disponibles en /api-docs');
+    console.log(`Swagger docs activo en /api-docs (${isVercel ? 'inline' : 'normal'})`);
 }
 
 module.exports = { swaggerDocs };
