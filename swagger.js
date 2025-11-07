@@ -10,12 +10,12 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://localhost:3000/api/v1',
-            description: 'Servidor local',
-        },
-        {
             url: 'https://portfolio-api-three-black.vercel.app/api/v1',
             description: 'Servidor en producción',
+        },
+        {
+            url: 'http://localhost:3000/api/v1',
+            description: 'Servidor local',
         },
     ],
     components: {
@@ -27,23 +27,25 @@ const swaggerDefinition = {
             },
         },
     },
-    security: [
-        {
-            bearerAuth: [],
-        },
-    ],
+    security: [{ bearerAuth: [] }],
 };
 
 const options = {
     swaggerDefinition,
-    apis: ['./routes/*.js', './routes/**/*.js'], // Rutas donde buscarás los comentarios de documentación
+    apis: ['./routes/*.js', './routes/**/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app) {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    console.log('Swagger Docs disponible en /api-docs');
+    const swaggerHTML = swaggerUi.generateHTML(swaggerSpec);
+
+    app.get('/api-docs', (req, res) => {
+        res.setHeader('Content-Type', 'text/html');
+        res.send(swaggerHTML);
+    });
+
+    console.log('Swagger Docs disponibles en /api-docs');
 }
 
 module.exports = { swaggerDocs };
