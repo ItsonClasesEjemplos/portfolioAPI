@@ -28,19 +28,15 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app) {
-    const isVercel = !!process.env.VERCEL;
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-    if (isVercel) {
-        const html = swaggerUi.generateHTML(swaggerSpec);
-        app.get('/api-docs', (req, res) => {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(html);
-        });
-    } else {
-        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    }
+    app.get('/api-docs.json', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
 
-    console.log(`Swagger docs activo en /api-docs (${isVercel ? 'inline' : 'normal'})`);
+    console.log('Swagger docs disponibles en: /api-docs');
 }
+
 
 module.exports = { swaggerDocs };
