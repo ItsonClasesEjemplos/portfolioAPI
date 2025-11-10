@@ -1,5 +1,8 @@
+const path = require('path');
+const express = require('express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const swaggerUiDist = require('swagger-ui-dist');
 
 const swaggerDefinition = {
     openapi: '3.0.0',
@@ -28,15 +31,41 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app) {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    const swaggerUiAssetPath = swaggerUiDist.getAbsoluteFSPath();
+    app.use('/swagger-ui', express.static(swaggerUiAssetPath));
 
     app.get('/api-docs.json', (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(swaggerSpec);
     });
 
-    console.log('Swagger docs disponibles en: /api-docs');
-}
+    app.get('/api-docs', (req, res) => {
+        res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Swagger UI</title>
+          <link rel="stylesheet" type="text/css" href="/swagger-ui/swagger-ui.css" />
+          <link rel="icon" type="image/png" href="/swagger-ui/favicon-32x32.png" />
+        </head>
+        <body>
+          <div id="swagger-ui"></div>
+          <script src="/swagger-ui/swagger-ui-bundle.js"></script>
+          <script src="/swagger-ui/swagger-ui-standalone-preset.js"></script>
+          <script>
+            window.onload = function() {
+              SwaggerUIBundle({
+                url: '/api-docs.json',
+                dom_id: '#swagger-ui',
+              });
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    });
 
+    console.log('Swagger UI disponible en /api-docs');
+}
 
 module.exports = { swaggerDocs };
