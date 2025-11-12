@@ -190,7 +190,7 @@ getPublicProjects("216578").then(console.log).catch(console.error);
 
 ---
 
-## GET `/projects/user/:userId` — Obtener proyectos de un usuario (protegido)
+## GET `/projects` — Obtener proyectos de un usuario (protegido)
 
 > Requiere header `auth-token: <token>`
 
@@ -199,7 +199,7 @@ getPublicProjects("216578").then(console.log).catch(console.error);
 ```js
 async function getProjectsByUser(userId) {
   const token = localStorage.getItem("authToken");
-  const res = await fetch(`${API_BASE}/projects/user/${userId}`, {
+  const res = await fetch(`${API_BASE}/projects`, {
     headers: { auth-token: `${token}` }
   });
   if (!res.ok) throw new Error("Error al obtener proyectos");
@@ -209,7 +209,7 @@ async function getProjectsByUser(userId) {
 
 ---
 
-## GET `/projects/:projectId` — Obtener proyecto por ID
+## GET `/projects/:projectId` — Obtener proyecto por ID (protegido)
 
 ### Ejemplo
 
@@ -223,7 +223,7 @@ async function getProjectById(id) {
 
 ---
 
-## POST `/projects` — Crear proyecto
+## POST `/projects` — Crear proyecto (protegido)
 
 ### Body
 
@@ -258,7 +258,7 @@ async function createProject(project) {
 
 ---
 
-## PUT `/projects/:projectId` — Actualizar proyecto
+## PUT `/projects/:projectId` — Actualizar proyecto (protegido)
 
 ### Ejemplo
 
@@ -280,7 +280,7 @@ async function updateProject(projectId, updates) {
 
 ---
 
-## DELETE `/projects/:projectId` — Eliminar proyecto
+## DELETE `/projects/:projectId` — Eliminar proyecto (protegido)
 
 ### Ejemplo
 
