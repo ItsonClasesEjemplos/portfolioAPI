@@ -8,6 +8,12 @@ const registerUser = async (data) => {
     if (isEmailExist) {
         throw boom.conflict('Email already exists');
     }
+
+    const isItsonIdExist = await userModel.findOne({ itsonId: newUser.itsonId });
+    if (isItsonIdExist) {
+        throw boom.conflict('itsonId already exists');
+    }
+
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(data.password, salt);
     newUser.password = password;

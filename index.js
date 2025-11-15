@@ -12,7 +12,3 @@ const {startMongoAtlas} = require('./services/dbService.js');
         console.error('Failed to start server:', err.message);
     }
 })();
-
-app.listen(port, ()=>{
-    console.log(`http://${host}:${port}/`)
-})
