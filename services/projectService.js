@@ -3,6 +3,7 @@ const projectModel = require('../models/projectModel');
 const userModel = require('../models/userModel');
 
 const getProjectsByUser = async (userId) => {
+    console.log('userId:', userId);
     return projectModel.find({userId:userId});
 }
 

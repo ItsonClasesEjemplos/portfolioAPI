@@ -4,7 +4,7 @@
   "description": "portfolio API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "node index.js",
     "dev:mongo": "export NODE_ENV=mongo&& nodemon index.js",
     "dev:mongo-win": "set NODE_ENV=mongo&& nodemon index.js",
     "start": "node index.js",

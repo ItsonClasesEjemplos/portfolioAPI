@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruta de Personajes - Guía Educativa</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-alt: #1f2937;
+        --primary: #60a5fa;
+        --accent: #34d399;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --danger: #f87171;
+        --warning: #fbbf24;
+        --border: rgba(148, 163, 184, 0.25);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #020817 0%, #0f172a 100%);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+
+      .header {
+        background: linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px 36px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.55);
+        border-left: 5px solid var(--primary);
+      }
+
+      h1, h2, h3 {
+        margin-top: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 12px;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+        margin-top: 28px;
+      }
+
+      .card {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.94), rgba(17, 24, 39, 0.82));
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px 24px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      }
+
+      .card h2 {
+        color: var(--primary);
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 999px;
+        margin-bottom: 12px;
+      }
+
+      .get { background: rgba(52, 211, 153, 0.12); color: var(--accent); border: 1px solid rgba(52, 211, 153, 0.3); }
+      .post { background: rgba(96, 165, 250, 0.12); color: var(--primary); border: 1px solid rgba(96, 165, 250, 0.3); }
+      .put { background: rgba(251, 191, 36, 0.12); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.3); }
+      .patch { background: rgba(168, 85, 247, 0.12); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.3); }
+      .delete { background: rgba(248, 113, 113, 0.12); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3); }
+
+      code, pre {
+        font-family: Consolas, 'Courier New', monospace;
+      }
+
+      .endpoint {
+        display: block;
+        background: #0b1120;
+        border: 1px solid var(--border);
+        color: #dbeafe;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin: 12px 0 14px;
+        overflow-x: auto;
+      }
+
+      ul, ol {
+        padding-left: 20px;
+      }
+
+      .json-sample {
+        background: #020817;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        overflow-x: auto;
+        color: #bfdbfe;
+      }
+
+      .info-box {
+        margin-top: 30px;
+        background: rgba(96, 165, 250, 0.08);
+        border-left: 4px solid var(--primary);
+        border-radius: 12px;
+        padding: 18px 20px;
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.08);
+      }
+
+      .response-list {
+        margin: 12px 0 0;
+        padding-left: 18px;
+      }
+
+      .small {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header {
+          padding: 24px 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .card {
+          padding: 18px 16px;
+        }
+
+        .endpoint,
+        .json-sample {
+          font-size: 0.83rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Ruta de Personajes</h1>
+        <p class="subtitle">
+          Esta página explica de forma educativa cómo funciona la API de personajes de la aplicación.
+          Sirve para entender CRUD, validación, parámetros, cuerpo de la petición y respuestas esperadas.
+        </p>
+      </header>
+
+      <section class="grid">
+        <article class="card">
+          <div class="badge get">GET</div>
+          <h2>Listar personajes</h2>
+          <code class="endpoint">GET /api/v1/characters?page=1&amp;limit=10</code>
+          <p>Devuelve una lista paginada de personajes.</p>
+          <ul>
+            <li><strong>page:</strong> número de página, opcional, valor por defecto: 1</li>
+            <li><strong>limit:</strong> número de registros por página, opcional, valor por defecto: 10</li>
+          </ul>
+          <p class="small">Respuesta esperada: un arreglo JSON con objetos de personajes.</p>
+          <pre class="json-sample">[
+  {
+    "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+    "name": "Astra",
+    "alias": "The Starfall",
+    "description": "Personaje curioso con poderes astrales.",
+    "species": "Humana",
+    "age": 24,
+    "weakness": "La luz solar directa",
+    "photo": "https://example.com/astral.png"
+  }
+]</pre>
+        </article>
+
+        <article class="card">
+          <div class="badge get">GET</div>
+          <h2>Obtener personaje por ID</h2>
+          <code class="endpoint">GET /api/v1/characters/:id</code>
+          <p>Busca un personaje usando su ID de MongoDB.</p>
+          <ul>
+            <li><strong>Parámetro obligatorio:</strong> id</li>
+            <li><strong>Tipo:</strong> string</li>
+            <li><strong>Ejemplo:</strong> 64b8c0d4d1b23a909f2e4c12</li>
+          </ul>
+          <p class="small">Si no existe, responde con 404 y un mensaje de "Character not found".</p>
+          <pre class="json-sample">{
+  "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+  "name": "Astra",
+  "alias": "The Starfall",
+  "description": "Personaje curioso con poderes astrales.",
+  "species": "Humana",
+  "age": 24,
+  "weakness": "La luz solar directa",
+  "photo": "https://example.com/astral.png"
+}</pre>
+        </article>
+
+        <article class="card">
+          <div class="badge get">GET</div>
+          <h2>Buscar por nombre</h2>
+          <code class="endpoint">GET /api/v1/characters/name/:name</code>
+          <p>Busca personajes por un nombre exacto.</p>
+          <ul>
+            <li><strong>Parámetro obligatorio:</strong> name</li>
+            <li><strong>Ejemplo:</strong> /api/v1/characters/name/Astra</li>
+          </ul>
+          <p class="small">La búsqueda se hace con el campo name del documento.</p>
+          <pre class="json-sample">[
+  {
+    "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+    "name": "Astra",
+    "alias": "The Starfall",
+    "description": "Personaje curioso con poderes astrales.",
+    "species": "Humana",
+    "age": 24,
+    "weakness": "La luz solar directa"
+  }
+]</pre>
+        </article>
+
+        <article class="card">
+          <div class="badge get">GET</div>
+          <h2>Buscar por alias</h2>
+          <code class="endpoint">GET /api/v1/characters/alias/:alias</code>
+          <p>Busca un personaje por su alias.</p>
+          <ul>
+            <li><strong>Parámetro obligatorio:</strong> alias</li>
+            <li><strong>Ejemplo:</strong> /api/v1/characters/alias/The%20Starfall</li>
+          </ul>
+          <p class="small">Se valida que el alias venga en la URL y no esté vacío.</p>
+        </article>
+
+        <article class="card">
+          <div class="badge post">POST</div>
+          <h2>Crear personaje</h2>
+          <code class="endpoint">POST /api/v1/characters</code>
+          <p>Registra un nuevo personaje en la base de datos.</p>
+          <h3>Body esperado</h3>
+          <pre class="json-sample">{
+  "name": "Astra",
+  "alias": "The Starfall",
+  "description": "Personaje curioso con poderes astrales.",
+  "species": "Humana",
+  "age": 24,
+  "weakness": "La luz solar directa",
+  "photo": "https://example.com/astral.png"
+}</pre>
+          <ul>
+            <li><strong>name:</strong> string, requerido</li>
+            <li><strong>alias:</strong> string, requerido</li>
+            <li><strong>description:</strong> string, requerido</li>
+            <li><strong>species:</strong> string, requerido</li>
+            <li><strong>age:</strong> number, opcional</li>
+            <li><strong>weakness:</strong> string, opcional</li>
+            <li><strong>photo:</strong> URL válida, opcional</li>
+          </ul>
+          <p class="small">Si el contenido es inválido, la API responde con 400.</p>
+          <pre class="json-sample">{
+  "message": "Character created successfully",
+  "data": {
+    "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+    "name": "Astra",
+    "alias": "The Starfall",
+    "description": "Personaje curioso con poderes astrales.",
+    "species": "Humana",
+    "age": 24,
+    "weakness": "La luz solar directa",
+    "photo": "https://example.com/astral.png"
+  }
+}</pre>
+        </article>
+
+        <article class="card">
+          <div class="badge put">PUT</div>
+          <h2>Actualizar completamente</h2>
+          <code class="endpoint">PUT /api/v1/characters/:id</code>
+          <p>Reemplaza todos los campos del personaje indicado.</p>
+          <p>Debe enviar el body completo con la estructura del modelo.</p>
+          <pre class="json-sample">{
+  "name": "Astra",
+  "alias": "La estrella fugaz",
+  "description": "Nueva descripción completa",
+  "species": "Humana",
+  "age": 25,
+  "weakness": "Temperaturas extremas",
+  "photo": "https://example.com/astral-v2.png"
+}</pre>
+          <p class="small">Si el ID no existe, la API responde con 404.</p>
+          <pre class="json-sample">{
+  "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+  "name": "Astra",
+  "alias": "La estrella fugaz",
+  "description": "Nueva descripción completa",
+  "species": "Humana",
+  "age": 25,
+  "weakness": "Temperaturas extremas",
+  "photo": "https://example.com/astral-v2.png"
+}</pre>
+        </article>
+
+        <article class="card">
+          <div class="badge patch">PATCH</div>
+          <h2>Actualizar parcialmente</h2>
+          <code class="endpoint">PATCH /api/v1/characters/:id</code>
+          <p>Actualiza solo los campos enviados en el request body.</p>
+          <pre class="json-sample">{
+  "weakness": "Campos magnéticos fuertes",
+  "age": 26
+}</pre>
+          <ul>
+            <li>Útil cuando solo quieres cambiar un campo</li>
+            <li>Los otros atributos no se tocan</li>
+            <li>Si no existe el ID, responde con 404</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="badge delete">DELETE</div>
+          <h2>Eliminar personaje</h2>
+          <code class="endpoint">DELETE /api/v1/characters/:id</code>
+          <p>Borra un personaje por su ID.</p>
+          <ul>
+            <li><strong>Parámetro obligatorio:</strong> id</li>
+            <li><strong>Resultado esperado:</strong> mensaje de éxito y metadata de eliminación</li>
+          </ul>
+          <p class="small">Si el personaje no existe, responde con 404.</p>
+          <pre class="json-sample">{
+  "message": "Character deleted successfully",
+  "data": {
+    "acknowledged": true,
+    "deletedCount": 1
+  }
+}</pre>
+        </article>
+      </section>
+
+      <div class="info-box">
+        <h3>Resumen de respuestas</h3>
+        <ul class="response-list">
+          <li><strong>200 OK:</strong> operación exitosa en GET, PUT, PATCH y DELETE.</li>
+          <li><strong>201 Created:</strong> cuando se crea correctamente un personaje.</li>
+          <li><strong>400 Bad Request:</strong> cuando el body o los parámetros no cumplen la validación.</li>
+          <li><strong>404 Not Found:</strong> cuando no se encuentra un personaje con ese ID, nombre o alias.</li>
+          <li><strong>500 Internal Server Error:</strong> error inesperado del servidor.</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>Ejemplo de respuesta exitosa</h3>
+        <pre class="json-sample">{
+  "_id": "64d9a6ef2ebdfb8b7f3bb12f",
+  "name": "Astra",
+  "alias": "The Starfall",
+  "description": "Personaje curioso con poderes astrales.",
+  "species": "Humana",
+  "age": 24,
+  "weakness": "La luz solar directa",
+  "photo": "https://example.com/astral.png"
+}</pre>
+      </div>
+
+      <div class="info-box">
+        <h3>Objetivo educativo</h3>
+        <p>
+          Esta ruta muestra cómo un backend con Express + MongoDB organiza una API REST. Aquí se practican conceptos clave como:
+        </p>
+        <ul>
+          <li>Rutas y endpoints</li>
+          <li>Parámetros en la URL</li>
+          <li>Cuerpo de la petición (JSON)</li>
+          <li>Validación con Joi</li>
+          <li>Operaciones CRUD</li>
+          <li>Manejo de errores con Boom</li>
+          <li>Modelo y servicio en capas</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
