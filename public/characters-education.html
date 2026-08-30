@@ -60,7 +60,7 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(1, minmax(0, 1fr));
         gap: 22px;
         margin-top: 28px;
       }
@@ -171,8 +171,7 @@
       <header class="header">
         <h1>Ruta de Personajes</h1>
         <p class="subtitle">
-          Esta página explica de forma educativa cómo funciona la API de personajes de la aplicación.
-          Sirve para entender CRUD, validación, parámetros, cuerpo de la petición y respuestas esperadas.
+          Guía de la API REST para administrar personajes a través de operaciones CRUD operados por llamadas HTTP.
         </p>
       </header>
 
@@ -250,13 +249,14 @@
         <article class="card">
           <div class="badge get">GET</div>
           <h2>Buscar por alias</h2>
-          <code class="endpoint">GET /api/v1/characters/alias/:alias</code>
-          <p>Busca un personaje por su alias.</p>
+          <code class="endpoint">GET /api/v1/characters/alias</code>
+          <p>Busca un personaje por su alias usando una cabecera HTTP.</p>
           <ul>
-            <li><strong>Parámetro obligatorio:</strong> alias</li>
-            <li><strong>Ejemplo:</strong> /api/v1/characters/alias/The%20Starfall</li>
+            <li><strong>Header obligatorio:</strong> alias</li>
+            <li><strong>Ejemplo:</strong> alias: The Starfall</li>
           </ul>
-          <p class="small">Se valida que el alias venga en la URL y no esté vacío.</p>
+          <pre class="json-sample">curl -H "alias: The Starfall" http://localhost:3000/api/v1/characters/alias</pre>
+          <p class="small">La cabecera alias se valida y se usa directamente para consultar el personaje.</p>
         </article>
 
         <article class="card">

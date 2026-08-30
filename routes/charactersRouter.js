@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require('joi');
 const {
     getCharacterByName,
     getCharacterById,
@@ -93,26 +94,30 @@ router.get('/name/:name', validatorHandler(getCharacterByNameSchema, 'params'), 
 
 /**
  * @swagger
- * /characters/alias/{alias}:
+ * /characters/alias:
  *   get:
- *     summary: Busca un personaje por su alias
+ *     summary: Busca un personaje por su alias enviado en la cabecera
  *     tags: [Characters]
  *     parameters:
- *       - in: path
+ *       - in: header
  *         name: alias
  *         required: true
  *         schema:
  *           type: string
- *         description: Alias del personaje
+ *         description: Alias del personaje que se desea buscar
  *     responses:
  *       200:
  *         description: Personaje encontrado
  *       404:
  *         description: Personaje no encontrado
  */
-router.get('/alias/:alias', validatorHandler(getCharacterByAliasSchema, 'params'), async (req, res, next) => {
+const aliasHeaderSchema = Joi.object({
+    alias: Joi.string().min(2).max(100).required()
+}).unknown(true);
+
+router.get('/alias', validatorHandler(aliasHeaderSchema, 'headers'), async (req, res, next) => {
     try {
-        const { alias } = req.params;
+        const alias = req.headers.alias;
         const character = await getCharacterByAlias(alias);
         res.status(200).json(character);
     } catch (error) {
