@@ -197,7 +197,7 @@ getPublicProjects("216578").then(console.log).catch(console.error);
 ### Ejemplo
 
 ```js
-async function getProjectsByUser(userId) {
+async function getProjectsByUser() {
   const token = localStorage.getItem("authToken");
   const res = await fetch(`${API_BASE}/projects`, {
     headers: { auth-token: `${token}` }
